@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>WEB MENABUNG BY PANGERAN😁</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 90%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e0f7fa;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 4px;
+        }
+
+        #grand-total {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Mesin Tabungan by @lyaaJulia</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nomor</th>
+            <th>Jumlah Uang Masuk</th>
+            <th>Jumlah Uang Keluar</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody id="table-body">
+        <!-- Baris akan diisi lewat JavaScript -->
+    </tbody>
+</table>
+
+<div id="grand-total">Grand Total: Rp 0</div>
+
+<script>
+    const tbody = document.getElementById('table-body');
+    const grandTotalDisplay = document.getElementById('grand-total');
+
+    for (let i = 1; i <= 500; i++) {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${i}</td>
+            <td><input type="number" class="masuk" value="0" oninput="hitung(this)"></td>
+            <td><input type="number" class="keluar" value="0" oninput="hitung(this)"></td>
+            <td><input type="number" class="total" value="0" readonly></td>
+        `;
+
+        tbody.appendChild(row);
+    }
+
+    function hitung(input) {
+        const row = input.parentElement.parentElement;
+        const masuk = row.querySelector('.masuk').valueAsNumber || 0;
+        const keluar = row.querySelector('.keluar').valueAsNumber || 0;
+        const total = row.querySelector('.total');
+        total.value = masuk - keluar;
+
+        updateGrandTotal();
+    }
+
+    function updateGrandTotal() {
+        let grandTotal = 0;
+        const totalFields = document.querySelectorAll('.total');
+        totalFields.forEach(field => {
+            grandTotal += field.valueAsNumber || 0;
+        });
+
+        grandTotalDisplay.textContent = `Grand Total: Rp ${grandTotal.toLocaleString("id-ID")}`;
+    }
+</script>
+
+</body>
+</html>
