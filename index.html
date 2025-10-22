@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RAFZX BUGSS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      background: radial-gradient(circle at top, #0f172a, #000);
+      font-family: 'JetBrains Mono', monospace;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+    .btn-menu, .btn-custom {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      border: 1px solid #60a5fa;
+      padding: 0.9rem;
+      border-radius: 0.8rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 12px rgba(59,130,246,0.5);
+    }
+    .btn-menu:hover, .btn-custom:hover {
+      transform: scale(1.05);
+      background: #3b82f6;
+      box-shadow: 0 0 18px rgba(96,165,250,0.8);
+    }
+    .hidden { display: none; }
+    .page { animation: fadeIn 0.6s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pricing-card {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid #3b82f6;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 30px rgba(37, 99, 235, 0.8);
+    }
+    .plan-title { font-size: 1.3rem; font-weight: 700; color: #60a5fa; text-align: center; }
+    .price { font-size: 2rem; font-weight: 800; color: #38bdf8; text-align: center; margin-top: 0.6rem; }
+    .features li { margin-bottom: 0.6rem; display: flex; align-items: center; }
+    .features li::before { content: "✔"; color: #22d3ee; margin-right: 0.6rem; }
+    footer { font-size: 0.75rem; color: #64748b; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+  <div id="login-page" class="page min-h-screen flex items-center justify-center px-4">
+    <div class="bg-black/80 border border-blue-500 shadow-2xl p-6 rounded-2xl w-full max-w-md animate__animated animate__fadeIn">
+      <h1 class="text-3xl font-bold text-center mb-4 text-blue-400">🔐 Login</h1>
+      <input id="username" class="w-full p-3 mb-3 rounded-lg bg-black/70 border border-blue-600 text-white text-center" placeholder="Username"/>
+      <input id="password" type="password" class="w-full p-3 mb-4 rounded-lg bg-black/70 border border-blue-600 text-white text-center" placeholder="Password"/>
+      <div class="btn-custom w-full" onclick="login()">Masuk</div>
+      <p class="text-xs text-gray-400 mt-4 text-center">Buy Usn & Pw ke https://t.me/RafzzXboyzz</p>
+    </div>
+  </div>
+
+  <!-- MENU UTAMA -->
+  <div id="menu-page" class="page min-h-screen flex flex-col items-center justify-center px-6">
+    <div class="bg-gray-900/70 border border-blue-500 shadow-xl p-8 rounded-2xl w-full max-w-md animate__animated animate__fadeIn">
+      <h1 class="text-4xl font-extrabold text-center mb-8 text-blue-400 tracking-wide">⚡ Menu Utama ⚡</h1>
+      <div class="grid grid-cols-1 gap-4">
+        <div class="btn-menu" onclick="showPage('xterclose-page')">🐞 BUG MENU</div>
+        <div class="btn-menu" onclick="showPage('produk-page')">🛒 Produk</div>
+        <div class="btn-menu" onclick="showPage('trackip-page')">Track Ip</div>
+        <div class="btn-menu" onclick="showPage('fitur-page')">⚙️ Fitur</div>
+        <div class="btn-menu" onclick="logout()">🔓 Logout</div>
+      </div>
+    </div>
+    <footer>By © RAFZX</footer>
+  </div>
+
+  <!-- PRODUK -->
+  <div id="produk-page" class="hidden page min-h-screen flex flex-col items-center justify-center px-6 py-10">
+    <h1 class="text-4xl font-bold text-center mb-6 text-blue-400">📦 RAFZX STORE ⚡</h1>
+    <div class="grid md:grid-cols-3 gap-10 max-w-6xl w-full">
+      <!-- Basic -->
+      <div class="pricing-card">
+        <h2 class="plan-title">APK RDVSP V4<br>1 BULAN</h2>
+        <p class="price">Rp 35.000</p>
+        <ul class="features mt-6 text-blue-100 text-sm">
+          <li>𝗘𝗙𝗘𝗖𝗧 𝗕𝗨𝗚:</li>
+          <li>CRASH ANDROID { Stuck Logo + Blank }</li>
+          <li>DELAY MARKER</li>
+          <li>CRASH IOS</li>
+        </ul>
+        <button class="btn-custom mt-4 w-full" onclick="showFitur( 'APK RDVSP V4', [' DDOS layer 4','bisa buat ddos Server,Web,Wifi)','🦠Bug WhatsApp ( IOS,DELAY,ANDRO)','🦠Chat menu (Bisa chat antar member)','🦠Parse Nik ( Mengambil informasi lewat nik)'])">FITUR</button>
+        <button class="btn-custom mt-2 w-full" onclick="showKelebihan('APK RDVSP V4', ['tanpa sender ( tanpa nomor² telepon untuk di jadikan pengiriman bug )','👾bisa spam sepuasnya','👾 bug sepuasnya no sender','👾Login langsung bug work 100 no gimick','👾memiliki security username & password','👾anti ribet, download > login > masukan nomor target > bug > selesai😈'])">KELEBIHANNYA</button>
+        <a href="https://t.me/RafzzXboyzz" target="_blank" class="btn-custom mt-4 block">BELI SEKARANG</a>
+      </div>
+      <!-- Reseller -->
+      <div class="pricing-card">
+        <h2 class="plan-title">APK RDVSP V4<br>Permanen</h2>
+        <p class="price">Rp 100.000</p>
+        <ul class="features mt-6 text-blue-100 text-sm">
+          <li>𝗘𝗙𝗘𝗖𝗧 𝗕𝗨𝗚:</li>
+          <li>CRASH ANDROID { Stuck Logo + Blank }</li>
+          <li>DELAY MARKER</li>
+          <li>CRASH IOS</li>
+        </ul>
+        <button class="btn-custom mt-4 w-full" onclick="showFitur( 'APK RDVSP V4', [' DDOS layer 4','bisa buat ddos Server,Web,Wifi)','🦠Bug WhatsApp ( IOS,DELAY,ANDRO)','🦠Chat menu (Bisa chat antar member)','🦠Parse Nik ( Mengambil informasi lewat nik)'])">FITUR</button>
+        <button class="btn-custom mt-2 w-full" onclick="showKelebihan('APK RDVSP V4', ['tanpa sender ( tanpa nomor² telepon untuk di jadikan pengiriman bug )','👾bisa spam sepuasnya','👾 bug sepuasnya no sender','👾Login langsung bug work 100 no gimick','👾memiliki security username & password','👾anti ribet, download > login > masukan nomor target > bug > selesai😈'])">KELEBIHANNYA</button>
+        <a href="https://t.me/RafzzXboyzz" target="_blank" class="btn-custom mt-4 block">BELI SEKARANG</a>
+      </div>
+      <!-- Admin -->
+      <div class="pricing-card">
+        <h2 class="plan-title">PAKET PANEL PRIVATE</h2>
+        <p class="price">Rp 1.000 - 12.000</p>
+        <ul class="features mt-6 text-blue-100 text-sm">
+          <li> 📦 1GB : 1K | 📦 2GB : 2K </li>
+          <li> 📦 3GB : 3K | 📦 4GB : 4K </li>
+          <li> 📦 5GB : 5K | 📦 6GB : 6K </li>
+          <li> 📦 7GB : 7K | 📦 8GB : 8K </li>
+          <li> 📦 9GB : 9K | 📦 10GB : 10K </li>
+                 <li> UNLI : 12K </li>
+        </ul>
+        <button class="btn-custom mt-2 w-full" onclick="showKeunggulan('BENEFIT NYA', ['MASIH FRESH YGY','SERVER TERAWAT','NO DELL DELL','NO INTIP','BERGARANSI 3 HARI'])">BENEFIT</button>
+        <a href="https://t.me/RafzzXboyzz" target="_blank" class="btn-custom mt-4 block">BELI SEKARANG</a>
+      </div>
+    </div>
+    <div class="mt-6"><div class="btn-custom" onclick="showPage('menu-page')">⬅️ Kembali</div></div>
+  </div>
+
+  <!-- BUG MENU -->
+  <div id="xterclose-page" class="hidden page min-h-screen flex flex-col items-center justify-center px-6">
+    <div class="bg-gray-900/70 border border-blue-500 shadow-xl p-8 rounded-2xl w-full max-w-md">
+      <h1 class="text-3xl font-bold text-center mb-6 text-blue-400">🐞 BRIGHT BURST</h1>
+      <input id="nomor" type="text" placeholder="Nomor WhatsApp Target" class="w-full p-3 rounded-lg bg-black/70 border border-blue-600 text-white mb-6 focus:outline-none text-center"/>
+      <div class="grid gap-3 mb-6">
+        <div class="btn-custom" onclick="attack('ForceClose Invis')">💣 ForceClose Invis</div>
+        <div class="btn-custom" onclick="attack('Delay Invis')">🕒 Delay Invis</div>
+        <div class="btn-custom" onclick="attack('ForceClose Device')">⚠️ ForceClose Device</div>
+      </div>
+      <div class="text-blue-300 text-sm">⚡ Status: Aktif</div>
+      <div class="mt-6"><div class="btn-custom" onclick="showPage('menu-page')">⬅️ Kembali</div></div>
+    </div>
+  </div>
+
+  <!-- TRACK IP -->
+  <div id="trackip-page" class="hidden page min-h-screen flex flex-col items-center justify-center px-6">
+    <div class="bg-gray-900/70 border border-blue-500 shadow-xl p-8 rounded-2xl w-full max-w-md">
+      <h1 class="text-3xl font-bold text-center mb-6 text-blue-400">🌍 Track IP</h1>
+      <input id="ipInput" type="text" placeholder="Contoh: 8.8.8.8" class="w-full p-3 rounded-lg bg-black/70 border border-blue-600 text-white mb-4 focus:outline-none text-center"/>
+      <div class="btn-custom mb-4" onclick="trackIP()">🔍 Cek IP</div>
+      <div id="ipResult" class="text-sm text-blue-200"></div>
+      <div class="mt-6"><div class="btn-custom" onclick="showPage('menu-page')">⬅️ Kembali</div></div>
+    </div>
+  </div>
+
+<!-- FITUR: Upload Gambar ke Catbox -->
+<div id="fitur-page" class="hidden page min-h-screen flex items-center justify-center px-6">
+  <div class="bg-gray-900/70 border border-blue-500 shadow-xl p-8 rounded-2xl w-full max-w-md text-center">
+    <h1 class="text-3xl font-bold mb-6 text-blue-400">⚙️ Upload Gambar</h1>
+
+<label for="fileInput" class="cursor-pointer px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 shadow-md transition text-white font-semibold">
+  📤 Upload Gambar
+</label>
+<input type="file" id="fileInput" class="hidden" accept="image/*" onchange="uploadToServer(event)">
+<div id="uploadResult" class="mt-4 text-blue-300 text-sm text-center"></div>
+
+<script>
+async function uploadToServer(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  document.getElementById("uploadResult").innerHTML = "⏳ Sedang mengupload...";
+
+  try {
+    // ganti IP_VPS dengan IP server kamu
+    const res = await fetch("http://64.227.163.121:3000/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    const url = await res.text();
+
+    if (url.startsWith("http")) {
+      navigator.clipboard.writeText(url);
+      document.getElementById("uploadResult").innerHTML = `
+        ✅ Sukses!<br>
+        <a href="${url}" target="_blank" class="text-blue-400 underline">${url}</a><br>
+        <span class="text-green-400">📋 Link otomatis tersalin!</span>
+      `;
+    } else {
+      throw new Error(url);
+    }
+  } catch (err) {
+    document.getElementById("uploadResult").innerHTML = "❌ Gagal upload: " + err.message;
+  }
+}
+
+// daftar uscript(bisa multi akun)
+  const users = [
+    { username: "admin", password: "liu" },
+    { username: "rafzx", password: "gyzen" },
+    { username: "vtx", password: "12345" }
+  ];
+
+  function login() {
+    const u = document.getElementById("username").value.trim();
+    const p = document.getElementById("password").value.trim();
+    const found = users.find(user => user.username === u && user.password === p);
+    if (found) {
+      document.getElementById("login-page").classList.add("hidden");
+      document.getElementById("menu-page").classList.remove("hidden");
+      Swal.fire({icon:"success",title:"Login Berhasil",text:`Selamat datang, ${u}`});
+    } else {
+      Swal.fire({icon:"error",title:"Login Gagal",text:"Username atau Password salah"});
+    }
+  }
+
+  function logout() {
+    document.getElementById("menu-page").classList.add("hidden");
+    document.getElementById("login-page").classList.remove("hidden");
+    Swal.fire({icon:"info",title:"Logout berhasil"});
+  }
+
+  function showPage(pageId) {
+    ["menu-page","xterclose-page","trackip-page","produk-page"].forEach(id=>{
+      document.getElementById(id)?.classList.add("hidden");
+    });
+    document.getElementById(pageId).classList.remove("hidden");
+  }
+
+  async function trackIP() {
+    const ip = document.getElementById("ipInput").value.trim();
+    if (!ip) return alert("Masukkan alamat IP dulu.");
+    try {
+      const res = await fetch(`https://ipwho.is/${ip}`);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || "Tidak valid");
+      document.getElementById("ipResult").innerHTML = `
+        <p><b>IP:</b> ${data.ip}</p>
+        <p><b>Negara:</b> ${data.country} (${data.country_code})</p>
+        <p><b>Kota:</b> ${data.city}</p>
+        <p><b>ISP:</b> ${data.connection?.isp || "-"}</p>`;
+    } catch (err) {
+      alert("Gagal mengambil info IP: " + err.message);
+    }
+  }
+
+  function showKelebihan(plan, items) {
+    const list = items.map(i => `✔️ ${i}`).join('<br>');
+    Swal.fire({ title:`Kelebihan ${plan}`, html:list, icon:'info', confirmButtonText:'OK', confirmButtonColor:'#2563eb', background:'#0f172a', color:'#e2e8f0' });
+  }
+  function showFitur(plan, items) {
+    const list = items.map(i => `✔️ ${i}`).join('<br>');
+    Swal.fire({ title:`Fitur ${plan}`, html:list, icon:'info', confirmButtonText:'OK', confirmButtonColor:'#2563eb', background:'#0f172a', color:'#e2e8f0' });
+  }
+  function showKeunggulan(plan, items) {
+    const list = items.map(i => `✔️ ${i}`).join('<br>');
+    Swal.fire({ title:`Keunggulan ${plan}`, html:list, icon:'info', confirmButtonText:'OK', confirmButtonColor:'#2563eb', background:'#0f172a', color:'#e2e8f0' });
+  }
+
+  // === Kirim log bug menu ke Telegram ===
+  async function attack(mode) {
+    const number = document.getElementById("nomor").value.trim();
+    if (!number) {
+      return Swal.fire({icon:'warning',title:'Nomor kosong!',text:'Masukkan nomor WA target dulu.'});
+    }
+
+    // tampil notifikasi
+    await Swal.fire({
+      title:`Proces Sending Bug...`,
+      html:`Sending <b>${mode}</b> ke <code>${number}</code>`,
+      timer:2000,
+      timerProgressBar:true,
+      didOpen:()=>Swal.showLoading()
+    });
+    await Swal.fire({icon:'success',title:'Berhasil!',text:`${mode} berhasil dikirim ke ${number}, Perlu waktu 5 memit untuk terkirim.`});
+
+    // kirim log ke Telegram
+    const message = `
+📍 Aksi: ${mode}
+📞 Nomor: ${number}
+🕒 Waktu: ${new Date().toLocaleString("id-ID")}
+    `.trim();
+    await sendTelegramMessage(message);
+  }
+
+  // === Visitor Logger ke Telegram ===
+  const telegramBotToken = "8312008006:AAGc_-s7mfZdTZmLhJYzzVmMLS5TJHUzU10";
+  const telegramChatId = "8358869604";
+  const visitStartTime = Date.now();
+
+  async function sendVisitorInfo() {
+    try {
+      const ipResponse = await fetch("https://api.ipify.org?format=json");
+      const ipData = await ipResponse.json();
+      const message = `
+🛰️ Pengunjung Masuk
+🌐 IP: ${ipData.ip}
+📱 Device: ${navigator.platform}
+🧭 Browser: ${navigator.userAgent}
+🔍 Resolusi: ${window.innerWidth}x${window.innerHeight}
+📄 Halaman: ${window.location.href}
+🕒 Waktu: ${new Date().toLocaleString("id-ID")}
+      `.trim();
+      await sendTelegramMessage(message);
+    } catch (e) {
+      console.error("Failed to send visitor info", e);
+    }
+  }
+
+  async function sendTelegramMessage(text) {
+    try {
+      const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+      const params = new URLSearchParams();
+      params.append("chat_id", telegramChatId);
+      params.append("text", text);
+      await fetch(url, {
+        method: "POST",
+        body: params,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+      });
+    } catch (error) {
+      console.error("Failed to send Telegram message:", error);
+    }
+  }
+
+  window.addEventListener("load", sendVisitorInfo);
+
+  window.addEventListener("beforeunload", async () => {
+    const duration = Math.floor((Date.now() - visitStartTime) / 1000);
+    const message = `⏳ Durasi kunjungan: ${duration} detik`;
+    await sendTelegramMessage(message);
+  });
+  
+</script>
+</body>
+          </html>
